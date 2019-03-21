@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Employees extends Model
 {
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'id');
     }
     
     protected $fillable = [
-        'nama', 'nomor_telepon', 'alamat', 'gaji', 'id_branch', 'id_user'
+        'nama', 'nomor_telepon', 'alamat', 'gaji', 'id_branch', 'id_user', 'id_roles'
     ];
 
     protected $hidden = [
@@ -22,4 +22,7 @@ class Employees extends Model
         'created_at','deleted_at'
     ];
     
+    public function role(){
+        return $this->hasOne(Role::class,'id');
+    }
 }

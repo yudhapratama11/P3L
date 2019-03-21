@@ -35,18 +35,11 @@ class BranchController extends Controller
             'nama' => 'required|max:255',
             'alamat' => 'required|max:255',
           ]);
-  
-    
-         //$password = trim($request->password);
           
           $branches = new Branches();
           $branches->nama = $request->nama;
           $branches->alamat = $request->alamat;
           $branches->save();
-
-        //   if ($request->roles) {
-        //     $user->syncRoles(explode(',', $request->roles));
-        //   }
     
           return response()->json(['status' => 'success','msg'=>'Cabang berhasil dibuat']);
     }

@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login']]);
     }
 
     public function login(Request $request)
@@ -26,7 +26,6 @@ class AuthController extends Controller
 
     protected function respondWithToken($token)
     {
-      
       return response()->json([
         'access_token' => $token,
         'token_type' => 'bearer',
@@ -45,5 +44,10 @@ class AuthController extends Controller
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+    
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
     }
 }
