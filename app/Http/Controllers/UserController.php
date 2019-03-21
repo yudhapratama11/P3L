@@ -9,7 +9,7 @@ use App\Employees;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Transformers\UserTransformer;
+//use App\Transformers\UserTransformer;
 
 class UserController extends RestController
 {
