@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Roles extends Model
+class Sparepart extends Model
 {
-    public function user(){
-        return $this->hasMany(User::class);
-    }
-    
     protected $fillable = [
-        'nama',
+        'nama', 'nomor_telepon', 'alamat', 'gaji', 'id_branch', 'id_user', 'id_roles'
     ];
+
+    // protected $hidden = [
+    // ];
 
     protected $dates = [
         'created_at','deleted_at'
     ];
+    
 }

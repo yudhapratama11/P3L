@@ -5,19 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use App\Transformers\UserTransformers;
 use App\Employees;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
-//use App\Transformers\UserTransformer;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends RestController
 {
-    protected $transformer = UserTransfomer::Class;
+    protected $transformer = UserTransformers::Class;
 
     public function index()
     {
-        $users = Employees::all();
+        $users = User::all();
         return $users;
     }
     
@@ -68,6 +70,7 @@ class UserController extends RestController
 
     public function getAuthenticatedUser()
     {
+        try{
             try {
     
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
@@ -88,14 +91,35 @@ class UserController extends RestController
 
             }
             //$userdata = User::where('id',$user->id)->first();
-            $userdata=User::find($user->id);
-            $response = $this->generateItem($userdata,UserTransfomer::Class);
+            //$userdata=User::find($user->id)->employees->role;
+            $userdata = User::with(['employees','employees.role','employees.branch'])->where('id',$user->id)->first();
+            //return $userdata;
+            $response = $this->generateItem($userdata);
             
             return $this->sendResponse($response, 201);
-            //$userdata = Employees::join('users','users.id','=','employees.id_user')->where('users.id',$user->id)->first();
-            //$userdata = User::with(['detail'])->where('id',$user->id)->first();
-            //return response()->json(compact('userdata'));
+        } catch (\Exception $e) {
+            return $this->sendIseResponse($e->getMessage());
+        }
     }
+
+    // public function loginAndroid(Request $request)
+    // {
+    //   $credentials = $request->only(['username', 'password']);
+
+    //   if(Auth::attempt($credentials))
+    //   { 
+    //       //$user = Auth::user()->with(['employees']);
+    //       $userdata = User::with(['employees','employees.role','employees.branch'])->find(Auth::id());
+    //       //$success['token'] =  $user->createToken('MyApp')->accessToken; 
+    //       //return response()->json($userdata, 200); 
+    //       //return $userdata;
+    //       $response = $this->generateItem($userdata);
+    //       return $this->sendResponse($response, 201);
+    //   } 
+    //   else{ 
+    //       return response()->json('gagal', 401); 
+    //   } 
+    // }
 
     // public function UniqueEmail($username)
     // {

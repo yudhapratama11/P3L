@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Employees;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+   
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login','loginAndroid']]);
     }
-
+  
     public function login(Request $request)
     {
       $credentials = $request->only(['username', 'password']);

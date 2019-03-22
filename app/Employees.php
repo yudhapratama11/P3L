@@ -25,4 +25,8 @@ class Employees extends Model
     public function role(){
         return $this->hasOne(Role::class,'id');
     }
+
+    public function branch(){
+        return $this->hasOne(Branch::class,'id');
+    }
 }

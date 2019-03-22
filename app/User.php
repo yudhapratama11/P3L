@@ -39,7 +39,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at','deleted_at'
     ];
 
-    public function detail(){
+    public function employees(){
         return $this->hasOne(Employees::class,'id');
     }
 
