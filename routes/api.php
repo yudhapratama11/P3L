@@ -37,9 +37,10 @@ Route::group([
 ], function ($router) {
     Route::post('/login','AuthController@login');
     Route::post('/logout','AuthController@logout');
+    Route::post('/loginAndroid','AuthController@loginAndroid');
     //Route::post('/me','AuthController@me');
 });
 
 
 //=======================Login Android====================
-Route::post('/loginAndroid','AndroidAuthController@login');
+

@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Employees;
 use Illuminate\Support\Facades\Auth;
+use App\Transformers\UserTransformers;
 
-class AuthController extends Controller
+class AuthController extends RestController
 {
-   
+    protected $transformer = UserTransformers::Class;
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('auth:api', ['except' => ['login','loginAndroid']]);
     }
   
@@ -24,6 +26,21 @@ class AuthController extends Controller
       }
 
       return $this->respondWithToken($token);
+    }
+
+    public function loginAndroid(Request $request)
+    {
+      $credentials = $request->only(['username', 'password']);
+
+      if(Auth::attempt($credentials))
+      { 
+          $userdata = User::with(['employees','employees.role','employees.branch'])->find(Auth::id());
+          $response = $this->generateItem($userdata);
+          return $this->sendResponse($response, 201);
+      } 
+      else{ 
+          return response()->json('gagal', 401); 
+      } 
     }
 
     protected function respondWithToken($token)
@@ -52,4 +69,6 @@ class AuthController extends Controller
     {
         return $this->respondWithToken(auth()->refresh());
     }
+
+    
 }
