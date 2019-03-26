@@ -17,17 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//====================================USER=================================//
+//=================================USER & LOGIN=============================//
 Route::get('/user','UserController@index');
 Route::post('/user','UserController@store');
-Route::get('/user/{id}','EmployeeController@show');
+Route::get('/user/{id}','UserController@show');
 Route::post('/updatepasswordAndroid/{id}','UserController@updatePassword');
 
 Route::delete('/employee/{id}','EmployeeController@destroy');
 Route::get('/employee','EmployeeController@index');
 Route::get('/employee/{id}','EmployeeController@show');
 Route::post('/employee/{id}','EmployeeController@update');
-//=========================================================================//
 
 //menampilkan user yang sedang login
 Route::group(['middleware' => ['jwt.verify']], function() {
@@ -39,17 +38,19 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('/login','AuthController@login');
-    Route::post('/logout','AuthController@logout');
-    Route::post('/loginAndroid','AuthController@loginAndroid');
+    Route::post('/login','AuthController@login'); //web platform
+    Route::post('/logout','AuthController@logout'); //web platform
+    Route::post('/loginAndroid','AuthController@loginAndroid'); //android & desktop platform
 });
+//=========================================================================//
 
 
 //==================================SUPPLIER===============================//
 Route::get('/supplier','SupplierController@index');
 Route::post('/supplier','SupplierController@store');
 Route::post('/supplier/{id}','SupplierController@update');
-Route::get('/supplier/{id}','SupplierController@destroy');
+Route::delete('/supplier/{id}','SupplierController@destroy');
+Route::get('/supplier/{id}','SupplierController@show');
 //=========================================================================//
 
 //==================================SPAREPART==============================/
@@ -57,6 +58,7 @@ Route::get('/sparepart','SparepartController@index');
 Route::post('/sparepart','SparepartController@store');
 Route::post('/sparepart/{id}','SparepartController@update');
 Route::delete('/sparepart/{id}','SparepartController@destroy');
+Route::get('/sparepart/{id}','SparepartController@show');
 //=========================================================================/
 
 //==================================SERVICE================================/
@@ -67,8 +69,10 @@ Route::delete('/service/{id}','ServiceController@destroy');
 Route::get('/service/{id}','ServiceController@show');
 //=========================================================================/
 
+//==================================BRANCH=================================/
 Route::get('/branches','BranchController@index');
 Route::post('/branches','BranchController@store');
 Route::post('/branches/{id}','BranchController@update');
 Route::get('/branches/{id}','BranchController@show');
 Route::delete('/branches/{id}','BranchController@destroy');
+//=========================================================================/
