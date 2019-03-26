@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Branches;
+use App\Branch;
 
 class BranchController extends Controller
 {
@@ -42,5 +42,10 @@ class BranchController extends Controller
           $branches->save();
     
           return response()->json(['status' => 'success','msg'=>'Cabang berhasil dibuat']);
+    }
+
+    public function update()
+    {
+        
     }
 }

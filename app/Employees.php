@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employees extends Model
 {
+    use SoftDeletes;
+
     public function user(){
         return $this->belongsTo(User::class,'id');
     }
@@ -23,10 +26,10 @@ class Employees extends Model
     ];
     
     public function role(){
-        return $this->hasOne(Role::class,'id');
+        return $this->hasOne(Role::class,'id','id_roles');
     }
 
     public function branch(){
-        return $this->hasOne(Branch::class,'id');
+        return $this->hasOne(Branch::class,'id','id_branch');
     }
 }

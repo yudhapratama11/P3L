@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/user','UserController@store');
 Route::get('/branches','BranchController@index');
 Route::post('/branches','BranchController@store');
+Route::get('/user/{id}','EmployeeController@destroy');
 
 //menampilkan user yang sedang login
 

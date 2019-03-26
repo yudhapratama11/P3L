@@ -11,7 +11,7 @@ class Branch extends Model
     ];
 
     public function branch(){
-        return $this->hasMany(Employees::class,'id');
+        return $this->hasMany(Employees::class,'id_branch','id');
     }
 
 }
