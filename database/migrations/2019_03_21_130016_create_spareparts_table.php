@@ -22,7 +22,7 @@ class CreateSparepartsTable extends Migration
             $table->integer('stok');
             $table->integer('stok_minimal');
             $table->string('penempatan');
-            $table->string('gambar');
+            $table->string('gambar')->nullable();
             $table->timestamps();
         });
     }

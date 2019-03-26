@@ -44,8 +44,32 @@ class BranchController extends Controller
           return response()->json(['status' => 'success','msg'=>'Cabang berhasil dibuat']);
     }
 
-    public function update()
+    public function show($id)
     {
+        $branch = Branch::where('id',$id)->get();
+        return $branch;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'nama' => 'required|max:255',
+            'alamat' => 'required|max:255',
+        ]);
         
+        $branch = Branch::findOrFail($id);
+        $branch->nama = $request->nama;
+        $branch->alamat = $request->alamat;
+        $branch->save();
+         
+        return response()->json(['status' => 'success','message'=>'Berhasil mengubah']);
+    }
+
+    public function destroy($id) // softdelete
+    {
+        $Branch = Branch::findOrFail($id);
+        $Branch->delete();
+        
+       return response()->json(['status' => 'success','msg'=>'Berhasil menghapus']);
     }
 }

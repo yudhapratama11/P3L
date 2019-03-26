@@ -57,18 +57,11 @@ class EmployeeController extends Controller
         $employees->id_roles = $request->$id_roles;
         $employees->save();
          
-        return response()->json(['status' => 'success','msg'=>'Berhasil mengubah']);
+        return response()->json(['status' => 'success','message'=>'Berhasil mengubah']);
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-    public function destroy($id)
+    public function destroy($id) // softdelete
     {
         $employees = Employees::findOrFail($id);
         $employees->delete();

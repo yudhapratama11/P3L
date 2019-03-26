@@ -28,7 +28,7 @@ class UserController extends RestController
         //
     }
 
-    public function store(Request $request)
+    public function store(Request $request) // input data employee
     {
         $this->validateWith([
             'nama' => 'required|max:255',
@@ -68,7 +68,7 @@ class UserController extends RestController
           return response()->json(['status' => 'success','msg'=>'User berhasil dibuat']);
     }
 
-    public function getAuthenticatedUser()
+    public function getAuthenticatedUser() //cek user yang sedang login (web platform)
     {
         try{
             try {

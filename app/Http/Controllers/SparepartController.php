@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Sparepart;
+use \File;
 
 class SparepartController extends Controller
 {
@@ -29,8 +30,7 @@ class SparepartController extends Controller
             'stok_minimal' => 'required',
             'penempatan' => 'required',
             'gambar' => 'required',
-            'filename' => 'required',
-            'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         
         $sparepart = new Sparepart();
@@ -43,16 +43,13 @@ class SparepartController extends Controller
         $sparepart->stok_minimal = $request->stok_minimal;
         $sparepart->penempatan = $request->penempatan;
         
-        if($request->hasfile('filename'))
+        if($request->hasfile('gambar'))
         {
-
-            foreach($request->file('filename') as $image)
-            {
-                $name = sha1(date('YmdHis') . str_random(30));
-                $save_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($this->photos_path, $save_name);  
-                $sparepart->filename=$save_name;
-            }
+            $image = $request->file('gambar');
+            $name = sha1(date('YmdHis') . str_random(30));
+            $save_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($this->photos_path, $save_name);  
+            $sparepart->gambar=$save_name;
         }
 
         $sparepart->save();
@@ -73,7 +70,6 @@ class SparepartController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'id' => 'required',
             'nama' => 'required',
             'merk' => 'required',
             'harga_beli' => 'required',
@@ -82,7 +78,7 @@ class SparepartController extends Controller
             'stok_minimal' => 'required',
             'penempatan' => 'required',
             'gambar' => 'required',
-            'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         
         $sparepart = Sparepart::findOrFail($id);
@@ -94,20 +90,20 @@ class SparepartController extends Controller
         $sparepart->stok_minimal = $request->stok_minimal;
         $sparepart->penempatan = $request->penempatan;
 
-        if($request->hasfile('filename'))
+        if($request->hasfile('gambar'))
         {
-
-            foreach($request->file('filename') as $image)
-            {
-                $name = sha1(date('YmdHis') . str_random(30));
-                $save_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($this->photos_path, $save_name);  
-                $sparepart->filename=$save_name;
+            $gambarlama = $this->photos_path . '/' . $sparepart->gambar;
+            if (file_exists($gambarlama)) {
+                unlink($gambarlama);
             }
+            $image = $request->file('gambar');
+            $name = sha1(date('YmdHis') . str_random(30));
+            $save_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($this->photos_path, $save_name);  
+            $sparepart->gambar=$save_name;
         }
-
         $sparepart->save();
-        return 'update';
+        return response()->json(['status'=>'success','message' => 'Update sparepart sukses'], 400);
     }
 
     public function destroy($id) //SoftDelete
