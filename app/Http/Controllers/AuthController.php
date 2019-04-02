@@ -22,7 +22,7 @@ class AuthController extends RestController
       $credentials = $request->only(['username', 'password']);
 
       if (!$token = auth()->attempt($credentials)) {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['message' => 'failed'], 401);
       }
 
       return $this->respondWithToken($token);
@@ -39,7 +39,7 @@ class AuthController extends RestController
           return $this->sendResponse($response, 201);
       } 
       else{ 
-          return response()->json('gagal', 401); 
+          return response()->json(['error'=>true,'message'=>'login failed'], 401); 
       } 
     }
 
@@ -53,10 +53,10 @@ class AuthController extends RestController
       ]);
     }
 
-    public function me()
-    {
-        return response()->json(auth()->user());
-    }
+    // public function me()
+    // {
+    //     return response()->json(auth()->user());
+    // }
 
     public function logout()
     {
@@ -70,5 +70,4 @@ class AuthController extends RestController
         return $this->respondWithToken(auth()->refresh());
     }
 
-    
 }

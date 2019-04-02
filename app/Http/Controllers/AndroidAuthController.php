@@ -19,11 +19,13 @@ class AndroidAuthController extends RestController
       if(Auth::attempt($credentials))
       { 
           $userdata = User::with(['employees','employees.role','employees.branch'])->find(Auth::id());
-          $response = $this->generateItem($userdata);
-          return $this->sendResponse($response, 201);
+          //return response()->json(['error'=>false,'message'=>'login success','data'=>$userdata],200);
+           $response = $this->generateItem($userdata);
+           return $this->sendResponseAndroid($response, 200);
+
       } 
       else{ 
-          return response()->json('gagal', 401); 
+        return response()->json(['error'=>true,'message'=>'login failed'], 400); 
       } 
     }
 }

@@ -40,10 +40,10 @@ Route::group([
 ], function ($router) {
     Route::post('/login','AuthController@login'); //web platform
     Route::post('/logout','AuthController@logout'); //web platform
-    Route::post('/loginAndroid','AuthController@loginAndroid'); //android & desktop platform
+     //android & desktop platform
 });
 //=========================================================================//
-
+Route::post('/loginAndroid','AndroidAuthController@login');
 
 //==================================SUPPLIER===============================//
 Route::get('/supplier','SupplierController@index');

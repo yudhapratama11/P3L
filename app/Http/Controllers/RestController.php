@@ -36,12 +36,16 @@ abstract class RestController extends Controller
         return new Collection($model, new $this->transformer);
     }
 
-    protected function sendResponse(ResourceInterface $data, $status = 200)
+    protected function sendResponse(ResourceInterface $data, $status )
     {
-        return response()->json(
-            $this->manager->createData($data)->toArray(),
-            $status
-        );
+        return response()->json($this->manager->createData($data)->toArray(),$status);
+
+    }
+
+    protected function sendResponseAndroid(ResourceInterface $data, $status )
+    {
+        return response()->json($this->manager->createData($data)->toArray(),$status);
+
     }
 
     protected function sendNotFoundResponse($status)
