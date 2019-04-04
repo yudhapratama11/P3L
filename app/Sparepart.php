@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Sparepart extends Model
 {
     public $incrementing = false;
-    
+    protected $primaryKey = "id";
+    protected $table = "spareparts";
+
     protected $fillable = [
-        'id','nama','merk','harga_beli','harga_jual','stok','stok_minimal','penempatan','gambar'
+        'id','nama','merk','harga_beli','harga_jual','stok','stok_minimal','penempatan','gambar','id_sparepart_type'
     ];
 
     // protected $hidden = [
@@ -18,5 +20,13 @@ class Sparepart extends Model
     protected $dates = [
         'created_at'
     ];
+
+    // protected $hidden = [
+    //     'created_at','updated_at'
+    // ];
+
+    public function sparepart_type(){
+        return $this->belongsTo(Sparepart_Type::class,'id_sparepart_type','id');
+    }
     
 }

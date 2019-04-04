@@ -23,7 +23,12 @@ class CreateSparepartsTable extends Migration
             $table->integer('stok_minimal');
             $table->string('penempatan');
             $table->string('gambar')->nullable();
+            $table->unsignedInteger('id_sparepart_type');
+            $table->foreign('id_sparepart_type')
+            ->references('id')->on('sparepart_types')
+            ->onDelete('cascade')->after('gambar');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

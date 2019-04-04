@@ -11,11 +11,6 @@ use App\Role;
 
 class UserTransformers extends TransformerAbstract
 {
-    /**
-     * Transform User.
-     *
-     * @param User $user
-     */
     public function transform(User $user)
     {
         return [

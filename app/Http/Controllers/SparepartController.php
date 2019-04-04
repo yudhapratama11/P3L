@@ -5,17 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Sparepart;
 use \File;
+use App\Transformers\SparepartTransformers;
 
-class SparepartController extends Controller
+class SparepartController extends RestController
 {
+    protected $transformer = SparepartTransformers::Class;
+    
     public function __construct()
     {
+        parent::__construct();
         $this->photos_path = public_path('/itemImages');
     }
     
     public function index()
     {
-        return response()->json(Sparepart::all());
+        //return response()->json(Sparepart::all());
+        $userdata = Sparepart::get();
+        //sreturn $userdata;
+        $response = $this->generateCollection($userdata);
+        return $this->sendResponse($response, 201);
     }
 
     public function store(Request $request)
@@ -28,6 +36,7 @@ class SparepartController extends Controller
             'harga_jual' => 'required',
             'stok' => 'required',
             'stok_minimal' => 'required',
+            'id_sparepart_type' => 'required',
             'penempatan' => 'required',
             'gambar' => 'required',
             'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -41,6 +50,7 @@ class SparepartController extends Controller
         $sparepart->harga_jual = $request->harga_jual;
         $sparepart->stok = $request->stok;
         $sparepart->stok_minimal = $request->stok_minimal;
+        $sparepart->id_sparepart_type = $request->id_sparepart_type;
         $sparepart->penempatan = $request->penempatan;
         
         if($request->hasfile('gambar'))
@@ -53,8 +63,10 @@ class SparepartController extends Controller
         }
 
         $sparepart->save();
-
-        return $sparepart;
+        
+        //return $sparepart;
+        $response = $this->generateItem($sparepart);
+        return $this->sendResponse($response, 201);
     }
 
     public function show($id)
