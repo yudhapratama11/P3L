@@ -9,8 +9,8 @@ class BranchController extends Controller
 {
     public function index()
     {
-        $branches = Branches::all();
-        return $branches;
+        $branches = Branch::all();
+        return response()->json(['data'=>$branches]);
     }
 
     /**

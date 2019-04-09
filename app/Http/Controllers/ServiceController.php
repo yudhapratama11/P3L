@@ -15,7 +15,7 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::all();
-        return $services;
+        return response()->json(['data'=>$services]);
     }
 
     /**
@@ -40,7 +40,7 @@ class ServiceController extends Controller
         $service->harga = $request->harga;
         $service->save();    
 
-        return response()->json(['status' => 'success','msg'=>'Service berhasil dibuat']);
+        return response()->json(['status' => 'success','msg'=>'Service berhasil dibuat'],201);
     }
 
     public function show($id)
@@ -72,7 +72,7 @@ class ServiceController extends Controller
         $service->harga = $request->harga;
         $service->save();
 
-        return response()->json(['status'=>'success','message'=>'Berhasil mengubah']);
+        return response()->json(['status'=>'success','message'=>'Berhasil mengubah'],201);
     }
 
     /**

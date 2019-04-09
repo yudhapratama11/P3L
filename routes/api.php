@@ -26,7 +26,7 @@ Route::post('/updatepasswordAndroid/{id}','UserController@updatePassword');
 Route::delete('/employee/{id}','EmployeeController@destroy');
 Route::get('/employee','EmployeeController@index');
 Route::get('/employee/{id}','EmployeeController@show');
-Route::post('/employee/{id}','EmployeeController@update');
+Route::patch('/employee/{id}','EmployeeController@update');
 
 //menampilkan user yang sedang login
 Route::group(['middleware' => ['jwt.verify']], function() {
@@ -48,23 +48,26 @@ Route::post('/loginAndroid','AndroidAuthController@login');
 //==================================SUPPLIER===============================//
 Route::get('/supplier','SupplierController@index');
 Route::post('/supplier','SupplierController@store');
-Route::post('/supplier/{id}','SupplierController@update');
+Route::patch('/supplier/{id}','SupplierController@update');
 Route::delete('/supplier/{id}','SupplierController@destroy');
 Route::get('/supplier/{id}','SupplierController@show');
 //=========================================================================//
 
 //==================================SPAREPART==============================/
+Route::post('/sparepart/{id}','SparepartController@updateSparepart');
 Route::get('/sparepart','SparepartController@index');
 Route::post('/sparepart','SparepartController@store');
-Route::post('/sparepart/{id}','SparepartController@update');
 Route::delete('/sparepart/{id}','SparepartController@destroy');
 Route::get('/sparepart/{id}','SparepartController@show');
+Route::patch('/sparepartAndroid/{id}','SparepartController@updateSparepartAndroid');
+Route::post('/gambarsparepartAndroid','SparepartController@updateSparepartAndroidPicture');
+Route::get('/sparepartkurang','SparepartController@checkSparepartStock'); //cek sparepart yang stoknya kurang dari stok minimal
 //=========================================================================/
 
 //==================================SERVICE================================/
 Route::get('/service','ServiceController@index');
 Route::post('/service','ServiceController@store');
-Route::post('/service/{id}','ServiceController@update');
+Route::patch('/service/{id}','ServiceController@update');
 Route::delete('/service/{id}','ServiceController@destroy');
 Route::get('/service/{id}','ServiceController@show');
 //=========================================================================/
@@ -76,3 +79,16 @@ Route::post('/branches/{id}','BranchController@update');
 Route::get('/branches/{id}','BranchController@show');
 Route::delete('/branches/{id}','BranchController@destroy');
 //=========================================================================/
+
+Route::get('/roles','RoleController@index');
+Route::post('/roles','RoleController@store');
+Route::patch('/roles/{id}','RoleController@update');
+Route::get('/roles/{id}','RoleController@show');
+Route::delete('/roles/{id}','RoleController@destroy');
+//=========================================================================/
+
+Route::get('/spareparttype','SparepartTypeController@index');
+Route::post('/spareparttype','SparepartTypeController@store');
+// Route::patch('/roles/{id}','RoleController@update');
+// Route::get('/roles/{id}','RoleController@show');
+// Route::delete('/roles/{id}','RoleController@destroy');

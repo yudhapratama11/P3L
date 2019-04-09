@@ -10,7 +10,7 @@ class SupplierController extends Controller
     public function index()
     {
         $supplier = Supplier::all();
-        return $supplier;
+        return response()->json(['data'=>$supplier],200);
     }
 
     /**
@@ -37,13 +37,13 @@ class SupplierController extends Controller
         $supplier->alamat = $request->alamat;
         $supplier->save();
 
-        return response()->json(['status' => 'success','msg'=>'Supplier berhasil dibuat']);
+        return response()->json(['status' => 'success','msg'=>'Supplier berhasil dibuat'],201);
     }
 
     public function show($id)
     {
         $supplier = Supplier::where('id',$id)->get();
-        return $supplier;
+        return response()->json(['data'=>$supplier],200);
     }
 
     /**
@@ -71,7 +71,7 @@ class SupplierController extends Controller
         $supplier->alamat = $request->alamat;
         $supplier->save();
 
-        return response()->json(['status' => 'success','msg'=>'Berhasil mengedit supplier']);
+        return response()->json(['status' => 'success','msg'=>'Berhasil mengedit supplier'],201);
     }
 
     public function destroy($id) // softdelete

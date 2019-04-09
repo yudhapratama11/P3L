@@ -11,8 +11,16 @@ class Sparepart_Type extends Model
     
     protected $table = "sparepart_types";
 
+    protected $fillable = [
+        'nama'
+    ];
+
     public function sparepart(){
         return $this->hasMany(Sparepart::class,'id_sparepart_type','id');
     }
+
+    protected $hidden = [
+        'created_at','updated_at','deleted_at'
+    ];
 
 }

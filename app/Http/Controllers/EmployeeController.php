@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Employees;
 use App\User;
+use App\Transformers\EmployeeTransformers;
+use App\Branch;
 
-class EmployeeController extends Controller
+class EmployeeController extends RestController
 {
-
+    protected $transformer = EmployeeTransformers::Class;
     public function index()
     {
-        $employees = Employees::all();
-        return $employees;
+        $employees = Employees::get()->where('id_roles','!=','1');
+        //return $employees;
+        $response = $this->generateCollection($employees);
+        return $this->sendResponse($response, 201);
+        
     }
 
     public function create()
@@ -52,11 +57,11 @@ class EmployeeController extends Controller
         $employees->nama = $request->nama;
         $employees->nomor_telepon = $request->nomor_telepon;
         $employees->alamat = $request->alamat;
+        $employees->id_roles = $request->id_roles;
+        $employees->id_branch = $request->id_branch;
         $employees->gaji = $request->gaji;
-        $employees->id_branch = $request->$id_branch;
-        $employees->id_roles = $request->$id_roles;
+        
         $employees->save();
-         
         return response()->json(['status' => 'success','message'=>'Berhasil mengubah']);
 
     }

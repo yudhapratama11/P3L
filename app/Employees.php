@@ -26,10 +26,10 @@ class Employees extends Model
     ];
     
     public function role(){
-        return $this->hasOne(Role::class,'id','id_roles');
+    return $this->hasOne(Role::class,'id','id_roles');
     }
 
     public function branch(){
-        return $this->hasOne(Branch::class,'id','id_branch');
+        return $this->hasOne(Branch::class,'id','id_branch')->withTrashed();
     }
 }
