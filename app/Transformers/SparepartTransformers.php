@@ -21,7 +21,7 @@ class SparepartTransformers extends TransformerAbstract
             'stok'              => $sparepart->stok,
             'stok_minimal'      => $sparepart->stok_minimal,
             'penempatan'        => $sparepart->penempatan,
-            'gambar'            => $sparepart->gambar,
+            'gambar'            => $sparepart->gambar,  
             'tipe_sparepart'    => optional($sparepart->sparepart_type)->nama,
         ];
     }
