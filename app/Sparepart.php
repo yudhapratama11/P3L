@@ -16,19 +16,19 @@ class Sparepart extends Model
         'id','nama','merk','harga_beli','harga_jual','stok','stok_minimal','penempatan','gambar','id_sparepart_type'
     ];
 
-    // protected $hidden = [
-    // ];
-
     protected $dates = [
         'created_at'
     ];
-
-    // protected $hidden = [
-    //     'created_at','updated_at'
-    // ];
 
     public function sparepart_type(){
         return $this->belongsTo(Sparepart_Type::class,'id_sparepart_type','id');
     }
     
+    public function sparepart_procurement_details(){
+        return $this->hasMany(Sparepart_Procurement_Details::class,'id_sparepart','id');
+    }
+
+    public function history_sparepart(){
+        return $this->hasMany(HistorySparepart::class,'id_sparepart','id');
+    }
 }

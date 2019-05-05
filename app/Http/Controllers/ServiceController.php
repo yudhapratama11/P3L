@@ -4,20 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Service;
+use App\Transformers\ServiceTransformers;
 
-class ServiceController extends Controller
+class ServiceController extends RestController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    protected $transformer = ServiceTransformers::Class;
+
     public function index()
+    {
+        $services = Service::all();
+        $response = $this->generateCollection($services);
+        return $this->sendResponse($response, 200);
+    }
+
+    public function indexAndroid()
     {
         $services = Service::all();
         return response()->json(['data'=>$services]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -40,13 +44,14 @@ class ServiceController extends Controller
         $service->harga = $request->harga;
         $service->save();    
 
-        return response()->json(['status' => 'success','msg'=>'Service berhasil dibuat'],201);
+        return response()->json(['status' => 'success','msg'=>'Service berhasil dibuat']);
     }
 
     public function show($id)
     {
         $service = Service::where('id',$id)->get();
-        return $service;
+        $response = $this->generateCollection($service);
+        return $this->sendResponse($response, 200);
     }
 
     /**
@@ -72,7 +77,7 @@ class ServiceController extends Controller
         $service->harga = $request->harga;
         $service->save();
 
-        return response()->json(['status'=>'success','message'=>'Berhasil mengubah'],201);
+        return response()->json(['status'=>'success','message'=>'Berhasil mengubah']);
     }
 
     /**
@@ -85,5 +90,6 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         $service->delete();
+        return response()->json(['status'=>'success','message'=>'Berhasil menghapus'],202);
     }
 }

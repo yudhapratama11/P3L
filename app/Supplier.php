@@ -16,4 +16,8 @@ class Supplier extends Model
     protected $dates = [
         'created_at','deleted_at'
     ];
+
+    public function sales(){
+        return $this->hasMany(Sales::class,'id_supplier','id')->withTrashed();
+    }
 }

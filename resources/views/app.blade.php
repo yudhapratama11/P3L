@@ -5,7 +5,8 @@
     </head>
     <body>
         <div id="app">
+            <app></app>
         </div>
     </body>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </html>

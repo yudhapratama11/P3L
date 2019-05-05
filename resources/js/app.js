@@ -8,6 +8,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify';
+import auth from './service/Auth'
+import store from './store'
 import axios from 'axios';
 //import VueAxios from 'vue-axios';
 import { routes } from './routes'
@@ -39,5 +41,13 @@ Vue.router = router
 new Vue({
     el: '#app',
     router,
-    render: h => h(App)
+    store,
+    render: h => h(App),
+    created() {
+        try {
+            auth.refresh()
+        } catch (err) {
+            // Do nothing :))
+        }
+    }
 }).$mount('#app');

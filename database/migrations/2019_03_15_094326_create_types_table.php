@@ -21,6 +21,7 @@ class CreateTypesTable extends Migration
                   ->references('id')->on('motorcycle_brands')
                   ->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

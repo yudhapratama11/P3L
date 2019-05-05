@@ -1,16 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Role;
 
 use Illuminate\Http\Request;
+use App\Role;
+use App\Transformers\RoleTransformers;
 
-class RoleController extends Controller
+class RoleController extends RestController
 {
+    protected $transformer = RoleTransformers::Class;
+
     public function index()
     {
         $roles = Role::all();
-        return $roles;
+        $response = $this->generateCollection($roles);
+        return $this->sendResponse($response, 200);
     }
 
     public function create()
@@ -34,7 +38,8 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = Role::where('id',$id)->get();
-        return $role;
+        $response = $this->generateItem($role);
+        return $this->sendResponse($response, 200);
     }
 
     public function edit($id)
@@ -52,12 +57,16 @@ class RoleController extends Controller
         $role->nama = $request->nama;
         $role->save();
 
-        return response()->json(['status'=>'success','message'=>'Berhasil mengubah']);
+        return response()->json(['status'=>'success','message'=>'Berhasil mengubah'],201);
     }
 
     public function destroy($id) // softdelete
     {
         $service = Service::findOrFail($id);
         $service->delete();
+
+        return response()->json(['status'=>'success','message'=>'Berhasil menghapus'],202);
     }
 }
+
+   

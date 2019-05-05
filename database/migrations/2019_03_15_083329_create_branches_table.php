@@ -17,6 +17,7 @@ class CreateBranchesTable extends Migration
             $table->increments('id');
             $table->string('nama');
             $table->text('alamat');
+            $table->text('nomor_telepon');
             $table->timestamps();
         });
     }

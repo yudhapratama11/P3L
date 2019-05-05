@@ -26,7 +26,7 @@ class CreateSparepartsTable extends Migration
             $table->unsignedInteger('id_sparepart_type');
             $table->foreign('id_sparepart_type')
             ->references('id')->on('sparepart_types')
-            ->onDelete('cascade')->after('gambar');
+            ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

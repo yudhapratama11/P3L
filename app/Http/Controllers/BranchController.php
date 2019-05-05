@@ -4,20 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Branch;
+use App\Transformers\BranchTransformers;
 
-class BranchController extends Controller
+class BranchController extends RestController
 {
+    protected $transformer = BranchTransformers::Class;
+
     public function index()
     {
         $branches = Branch::all();
-        return response()->json(['data'=>$branches]);
+        $response = $this->generateCollection($branches);
+        return $this->sendResponse($response, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
@@ -36,9 +35,10 @@ class BranchController extends Controller
             'alamat' => 'required|max:255',
           ]);
           
-          $branches = new Branches();
+          $branches = new Branch();
           $branches->nama = $request->nama;
           $branches->alamat = $request->alamat;
+          $branches->nomor_telepon = $request->nomor_telepon;
           $branches->save();
     
           return response()->json(['status' => 'success','msg'=>'Cabang berhasil dibuat']);
@@ -47,7 +47,8 @@ class BranchController extends Controller
     public function show($id)
     {
         $branch = Branch::where('id',$id)->get();
-        return $branch;
+        $response = $this->generateCollection($branch);
+        return $this->sendResponse($response, 200);
     }
 
     public function update(Request $request, $id)
@@ -60,6 +61,7 @@ class BranchController extends Controller
         $branch = Branch::findOrFail($id);
         $branch->nama = $request->nama;
         $branch->alamat = $request->alamat;
+        $branch->nomor_telepon = $request->nomor_telepon;
         $branch->save();
          
         return response()->json(['status' => 'success','message'=>'Berhasil mengubah']);

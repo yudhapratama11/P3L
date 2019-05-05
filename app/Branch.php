@@ -9,11 +9,10 @@ class Branch extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'nama', 'alamat'
+        'nama', 'alamat', 'nomor_telepon'
     ];
 
     public function branch(){
         return $this->hasMany(Employees::class,'id_branch','id');
     }
-
 }

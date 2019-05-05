@@ -12,6 +12,7 @@ class SparepartTransformers extends TransformerAbstract
     
     public function transform(Sparepart $sparepart)
     {
+        $placement = explode('-',trim($sparepart->penempatan));
         return [
             'id'                => $sparepart->id,
             'nama'              => $sparepart->nama,
@@ -21,6 +22,9 @@ class SparepartTransformers extends TransformerAbstract
             'stok'              => $sparepart->stok,
             'stok_minimal'      => $sparepart->stok_minimal,
             'penempatan'        => $sparepart->penempatan,
+            'posisi'            => $placement[0],
+            'tempat'            => $placement[1],
+            'nomor'             => $placement[2],
             'gambar'            => $sparepart->gambar,  
             'tipe_sparepart'    => optional($sparepart->sparepart_type)->nama,
         ];

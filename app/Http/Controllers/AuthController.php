@@ -36,7 +36,7 @@ class AuthController extends RestController
       { 
           $userdata = User::with(['employees','employees.role','employees.branch'])->find(Auth::id());
           $response = $this->generateItem($userdata);
-          return $this->sendResponse($response, 201);
+          return $this->sendResponse($response, 200);
       } 
       else{ 
           return response()->json(['error'=>true,'message'=>'login failed'], 401); 
@@ -53,15 +53,9 @@ class AuthController extends RestController
       ]);
     }
 
-    // public function me()
-    // {
-    //     return response()->json(auth()->user());
-    // }
-
     public function logout()
     {
         auth()->logout();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
     

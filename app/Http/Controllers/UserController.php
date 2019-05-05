@@ -20,7 +20,8 @@ class UserController extends RestController
     public function index()
     {
         $users = User::all();
-        return $users;
+        $response = $this->generateCollection($users);
+        return $this->sendResponse($response, 200);
     }
     
     public function create()
@@ -47,7 +48,7 @@ class UserController extends RestController
             
             $user = new User();
             $user->username = $request->username;
-            $user->password = Hash::make($password);
+            $user->password = bycrypt($password);
             $user->save();
           }
 
@@ -66,6 +67,51 @@ class UserController extends RestController
           $employees->save();
     
           return response()->json(['status' => 'success','msg'=>'User berhasil dibuat']);
+    }
+
+    public function updatePassword(Request $request) // web platform
+    {
+        $this->validateWith([
+            'password_lama' => 'required',
+            'password_baru' => 'required',
+        ]);
+
+        $user = User::findOrFail(JWTAuth::parseToken()->authenticate()->id);
+        if(Hash::check($request->password_lama, $user->password))
+        {
+            $user->password = bycrypt($request->password_baru);    
+            $json=['status' => 'success','msg'=>'Password berhasil diubah'];
+        }
+        else
+        {
+            $json=['status' => 'failed','msg'=>'Password yang anda masukkan salah, silahkan coba lagi'];
+        }
+          $user->save();
+          
+          return response()->json($json);
+    }
+
+    public function updatePasswordAndroid(Request $request, $id)
+    {
+        $this->validateWith([
+            'password_lama' => 'required',
+            'password_baru' => 'required',
+        ]);
+
+        $user = User::findOrFail($id);
+        if(Hash::check($request->password_lama, $user->password))
+        {
+            $user->password = Hash::make($request->password_baru);    
+            $json=['status' => 'success','msg'=>'Password berhasil diubah'];
+            $user->save();
+        }
+        else
+        {
+            $json=['status' => 'failed','msg'=>'Password yang anda masukkan salah, silahkan coba lagi'];
+        }
+        
+          
+        return response()->json($json);
     }
 
     public function getAuthenticatedUser() //cek user yang sedang login (web platform)
@@ -100,49 +146,4 @@ class UserController extends RestController
         }
     }
 
-
-    public function updatePassword(Request $request) // web platform
-    {
-        $this->validateWith([
-            'password_lama' => 'required',
-            'password_baru' => 'required',
-        ]);
-
-        $user = User::findOrFail(JWTAuth::parseToken()->authenticate()->id);
-        if(Hash::check($request->password_lama, $user->password))
-        {
-            $user->password = Hash::make($request->password_baru);    
-            $json=['status' => 'success','msg'=>'Password berhasil diubah'];
-        }
-        else
-        {
-            $json=['status' => 'failed','msg'=>'Password yang anda masukkan salah, silahkan coba lagi'];
-        }
-          $user->save();
-          
-          return response()->json($json);
-    }
-
-    public function updatePasswordAndroid(Request $request, $id)
-    {
-        $this->validateWith([
-            'password_lama' => 'required',
-            'password_baru' => 'required',
-        ]);
-
-        $user = User::findOrFail($id);
-        if(Hash::check($request->password_lama, $user->password))
-        {
-            $user->password = Hash::make($request->password_baru);    
-            $json=['status' => 'success','msg'=>'Password berhasil diubah'];
-            $user->save();
-        }
-        else
-        {
-            $json=['status' => 'failed','msg'=>'Password yang anda masukkan salah, silahkan coba lagi'];
-        }
-        
-          
-        return response()->json($json);
-    }
 }

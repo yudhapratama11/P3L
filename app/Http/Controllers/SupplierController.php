@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Supplier;
+use App\Transformers\SupplierTransformers;
 
-class SupplierController extends Controller
+class SupplierController extends RestController
 {
+    protected $transformer = SupplierTransformers::Class;
+
     public function index()
     {
         $supplier = Supplier::all();
-        return response()->json(['data'=>$supplier],200);
+        $response = $this->generateCollection($supplier);
+        return $this->sendResponse($response, 200);
     }
 
     /**
@@ -43,7 +47,9 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::where('id',$id)->get();
-        return response()->json(['data'=>$supplier],200);
+        $response = $this->generateItem($supplier);
+        return $this->sendResponse($response, 200);
+    
     }
 
     /**
@@ -79,6 +85,6 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
         $supplier->delete();
 
-    	return response()->json(['status' => 'success','msg'=>'Berhasil menghapus supplier']);
+    	return response()->json(['status' => 'success','msg'=>'Berhasil menghapus'],202);
     }
 }

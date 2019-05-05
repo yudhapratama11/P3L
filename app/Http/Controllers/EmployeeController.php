@@ -74,6 +74,6 @@ class EmployeeController extends RestController
         $user = User::findOrFail($employees->id_user);
         $user->delete();
 
-    	return response()->json(['status' => 'success','msg'=>'Berhasil menghapus']);
+    	return response()->json(['status' => 'success','msg'=>'Berhasil menghapus'],202);
     }
 }
