@@ -17,11 +17,6 @@ class ServiceController extends RestController
         return $this->sendResponse($response, 200);
     }
 
-    public function indexAndroid()
-    {
-        $services = Service::all();
-        return response()->json(['data'=>$services]);
-    }
     /**
      * Show the form for creating a new resource.
      *

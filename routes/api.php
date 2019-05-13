@@ -63,6 +63,7 @@ Route::post('/sparepart','SparepartController@store');
 Route::delete('/sparepart/{id}','SparepartController@destroy');
 Route::get('/sparepart/{id}','SparepartController@show');
 Route::get('/sparepartkurang','SparepartController@checkSparepartStock'); //cek sparepart yang stoknya kurang dari stok minimal
+
 //Android
 Route::patch('/sparepartAndroid/{id}','SparepartController@updateSparepartAndroid');
 Route::post('/gambarsparepartAndroid','SparepartController@updateSparepartAndroidPicture'); 
@@ -163,9 +164,10 @@ Route::patch('/transaction/{id}','TransactionController@update');
 Route::get('/transaction/{id}','TransactionController@show');
 Route::delete('/transaction/{id}','TransactionController@destroy');
 
+Route::post('/transaction/verification/{id}','TransactionController@verification');
+
 Route::post('/transactionAndroid','TransactionController@storeAndroid');
 //=========================================================================/
-
 
 //====================TransactionDetailSparepartAndroid=====================/
 Route::get('/spareparttransaction','SparepartTransactionController@index');
@@ -177,10 +179,21 @@ Route::delete('/spareparttransaction/{id}','SparepartTransactionController@destr
 
 //====================TransactionDetailServiceAndroid=====================/
 Route::get('/servicetransaction','ServiceTransactionController@index');
-Route::post('/servicetransaction','ServiceTransactionController@store');
+Route::post('/servicetransaction','ServiceTransactionController@storeAndroid');
 Route::patch('/servicetransaction/{id}','ServiceTransactionController@update');
 Route::get('/servicetransaction/{id}','ServiceTransactionController@show');
 Route::delete('/servicetransaction/{id}','ServiceTransactionController@destroy');
+//=========================================================================/
+
+//===========================CustomerMotorcycle===========================/
+Route::get('/customermotorcycle','CustomerMotorcycleController@index');
+Route::post('/customermotorcycle','CustomerMotorcycleController@store');
+Route::patch('/customermotorcycle/{id}','CustomerMotorcycleController@update');
+// Route::get('/customermotorcycle/{id}','CustomerMotorcycleController@show');
+Route::get('/customermotorcyclebyid/{id}','CustomerMotorcycleController@getMotorcycleByIdCustomer');
+Route::delete('/customermotorcycle/{id}','CustomerMotorcycleController@destroy');
+
+
 //=========================================================================/
 
 //=================================TOKEN==================================/
@@ -191,3 +204,5 @@ Route::get('/whoami', 'TokenController@validateToken');
 //=================================HISTORY=================================/
 Route::get('/historysparepart','HistorySparepartController@index');
 //=========================================================================/
+
+Route::get('/employeeonduty','EmployeeOnDutyController@index');

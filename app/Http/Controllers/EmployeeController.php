@@ -16,7 +16,7 @@ class EmployeeController extends RestController
         $employees = Employees::get()->where('id_roles','!=','1');
         //return $employees;
         $response = $this->generateCollection($employees);
-        return $this->sendResponse($response, 201);
+        return $this->sendResponse($response, 200);
         
     }
 

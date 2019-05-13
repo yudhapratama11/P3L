@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\SparepartTransaction;
-use App\Transformers\SparepartTransactionTransformers;
+use App\EmployeeOnDuty;
+use App\Transformers\EmployeeOnDutyTransformers;
 
-class SparepartTransactionController extends RestController
+class EmployeeOnDutyController extends RestController
 {
-    protected $transformer = SparepartTransactionTransformers::Class;
-
+    protected $transformer = EmployeeOnDutyTransformers::class;
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $spareparttransaction = SparepartTransaction::all();
-        $response = $this->generateCollection($spareparttransaction);
+        $employeeonduty = EmployeeOnDuty::all();
+        $response = $this->generateCollection($employeeonduty);
         return $this->sendResponse($response, 200);
     }
 
@@ -27,19 +31,15 @@ class SparepartTransactionController extends RestController
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        date_default_timezone_set('Asia/Jakarta');
-        
-        $spareparttransaction = new SparepartTransaction();
-        $spareparttransaction->id_transaction = $request->id_transaction;
-        $spareparttransaction->id_sparepart = $request->id_sparepart;
-        $spareparttransaction->jumlah = $request->jumlah;
-        $spareparttransaction->harga_satuan = $request->harga_satuan;
-        $spareparttransaction->subtotal = $request->subtotal;
-        $spareparttransaction->save();
-        
-        return response()->json(['status' => 'success','msg'=>'Transaction detail sparepart berhasil dibuat']);
+        //
     }
 
     /**

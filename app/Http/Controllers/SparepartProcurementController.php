@@ -68,10 +68,7 @@ class SparepartProcurementController extends RestController
         return response()->json(['message'=>$procurement->id], 201); 
     }
 
-    public function storeProcurementDetailAndroid(Request $request)
-    {
-        
-    }
+    
 
 
     public function show($id)

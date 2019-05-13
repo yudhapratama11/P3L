@@ -16,6 +16,5 @@ class MotorcycleType extends Model
     public function MotorcycleBrand(){
         return $this->belongsTo(MotorcycleBrand::class,'id_motorcycle_brands','id')->withTrashed();
     }
-
     
 }

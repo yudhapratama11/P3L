@@ -17,4 +17,9 @@ class Customer extends Model
         'created_at','deleted_at', 'updated_at'
     ];
     
+
+    public function customer_motorcycle(){
+        return $this->hasMany(CustomerMotorcycle::class,'id_customer','id');
+    }
+
 }

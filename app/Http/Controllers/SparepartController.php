@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Sparepart;
+use App\SparepartProcurement;
+use App\HistorySparepart;
 use \File;
 use App\Transformers\SparepartTransformers;
 
@@ -20,9 +22,8 @@ class SparepartController extends RestController
     public function index()
     {
         $sparepart = Sparepart::orderBy('nama','asc')->get();
-        //sreturn $userdata;
         $response = $this->generateCollection($sparepart);
-        return $this->sendResponse($response, 201);
+        return $this->sendResponse($response, 200);
     }
 
     public function store(Request $request)
@@ -67,9 +68,25 @@ class SparepartController extends RestController
         return $this->sendResponse($response, 201);
     }
 
+    public function sortStockTerdikit()
+    {
+        $sparepart = Sparepart::orderBy('stok','asc')->get();
+        $response = $this->generateCollection($sparepart);
+        return $this->sendResponse($response, 200);
+    }
+
+    public function sortStockTerbanyak()
+    {
+        $sparepart = Sparepart::orderBy('stok','desc')->get();
+        $response = $this->generateCollection($sparepart);
+        return $this->sendResponse($response, 200);
+    }
+
     public function show($id)
     {
-        return Sparepart::where([['id',$id]])->first();
+        $sparepart = Sparepart::where('id',$id)->get();
+        $response = $this->generateCollection($sparepart);
+        return $this->sendResponse($response, 200);
     }
 
     public function edit($id)
@@ -111,11 +128,38 @@ class SparepartController extends RestController
             $image->move($this->photos_path, $save_name);  
             $sparepart->gambar=$save_name;
 
-            //punya agung
-            // $file = $request->file('gambar');
-            // $name=time().$file->getClientOriginalName();
-            // $file->move(public_path().'/itemImages/', $name);
-            // $sparepart->gambar=$name;
+        }
+        if($sparepart->stok<$sparepart->stok_minimal)
+        {
+            $token=['eIoczThh-pI:APA91bGRMcQCktS0npeEWJc08pT-H8p5-tWDN6M4JmhtacJcU8iRzcQFxFEiwm5ubsgwBrvU5r3vSZLLGyaeQT0nzq43RpZ0-gfjtGF1e1WPe9Dn_909ObcciIiTeKpgOqt1AD3ypCWU'];
+            
+            $data = array('title' => $data->nama ,'body' => 'Jumlah stok kurang dari stok minimal');
+                    $fcmNotification = [
+                        'registration_ids' => $token, 
+                        // 'to'        => $token, //single token
+                        'priority' => "high",
+                        'notification' => $data,
+                    ];
+                
+                    
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+                    $server_key = "AAAAbxBngYk:APA91bEfpbZBtyjWhDASp3wgD79iXKdZGVTS3qoSosfF7NGIY-2kzadipvWq-JwUkwVdiS6SZhGkPtA_VjsQqhnYBV0txs6l2x7Sx2KXq4mcAWocMBGMV2yTF_IzHhZRRp3ZrxeWbzAG";
+                    $headers = [
+                        'Authorization: key='.$server_key,
+                        'Content-Type: application/json'
+                    ];
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL,$url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
+                    $result = curl_exec($ch);
+                    if ($result === FALSE) {
+                        return curl_error($ch);
+                    }
+                    curl_close($ch);
         }
         $sparepart->save();
         return response()->json(['status'=>'success','message' => 'Update sparepart sukses'], 200);
@@ -143,6 +187,38 @@ class SparepartController extends RestController
         $sparepart->penempatan = $request->penempatan;
 
         $sparepart->save();
+        if($sparepart->stok<$sparepart->stok_minimal)
+        {
+            $token=['f_KfuL9RRSE:APA91bGiCux7tGrnKDJCIB9hAekL21HB4MZNlV8xr-0CHku7d3XGr2zAYbhhGgAwnRNEvntsRVTJ1A6yhg6MruNNwrVlk7VFnX5gOiZLfuf1QVBxE_y310yMv_W_AcuLcC2WRQC5yUEn'];
+            
+            $data = array('title' => $sparepart->nama ,'body' => 'Jumlah stok kurang dari stok minimal');
+                    $fcmNotification = [
+                        'registration_ids' => $token, 
+                        // 'to'        => $token, //single token
+                        'priority' => "high",
+                        'notification' => $data,
+                    ];
+                
+                    
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+                    $server_key = "AAAAbxBngYk:APA91bEfpbZBtyjWhDASp3wgD79iXKdZGVTS3qoSosfF7NGIY-2kzadipvWq-JwUkwVdiS6SZhGkPtA_VjsQqhnYBV0txs6l2x7Sx2KXq4mcAWocMBGMV2yTF_IzHhZRRp3ZrxeWbzAG";
+                    $headers = [
+                        'Authorization: key='.$server_key,
+                        'Content-Type: application/json'
+                    ];
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL,$url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
+                    $result = curl_exec($ch);
+                    if ($result === FALSE) {
+                        return curl_error($ch);
+                    }
+                    curl_close($ch);
+        }
         return response()->json(['status'=>'success','message' => 'Update sparepart sukses'], 201);
     }
 
@@ -166,11 +242,6 @@ class SparepartController extends RestController
             $image->move($this->photos_path, $save_name);  
             $sparepart->gambar=$save_name;
 
-            //punya agung
-            // $file = $request->file('gambar');
-            // $name=time().$file->getClientOriginalName();
-            // $file->move(public_path().'/itemImages/', $name);
-            // $sparepart->gambar=$name;
         }
         $sparepart->save();
         return response()->json(['status'=>'success','message' => 'Update sparepart sukses'], 201);
@@ -181,14 +252,59 @@ class SparepartController extends RestController
         $employees = Sparepart::findOrFail($id);
         $employees->delete();
 
-    	return response()->json(['status' => 'success','message'=>'Berhasil menghapus'],200);
+    	return response()->json(['status' => 'success','message'=>'Berhasil menghapus'],202);
     }
 
     public function checkSparepartStock()
     {
         $sparepart = Sparepart::whereRaw('stok_minimal > stok')->get();
-        //sreturn $userdata;
         $response = $this->generateCollection($sparepart);
         return $this->sendResponse($response, 201);
+
+    }
+    
+    public function sparepartVerification(Request $request, $id)
+    {
+        try {
+            date_default_timezone_set('Asia/Jakarta');
+            $sparepartproc = SparepartProcurement::findOrFail($id);
+            $sparepartproc->status = 1;
+            $spareparts = $request->get('spareparts');
+            foreach($spareparts as $sparepart)
+            {
+                $data=Sparepart::findorFail($sparepart['id']);
+                $data->stok = $data->stok + $sparepart['stok'];
+                $data->harga_beli = $sparepart['harga_beli'];
+                $data->save();
+
+                $history = new SparepartHistory();
+                $history->id_sparepart = $sparepart['id'];
+                $history->tanggal=$request->get('tanggal').' '.date('Y-m-d H:i:s');
+                $history->jumlah=$sparepart['stok'];
+                $history->satuan_harga = $sparepart['harga_beli'];
+                $history->subtotal = $sparepart['stok'] * $sparepart['harga_beli'];
+                $history->status = 1;
+                $history->save();
+            }
+            return response()->json('Success',201);
+        } catch (ModelNotFoundException $e) {
+            return $this->sendNotFoundResponse('sparepart_not_found');
+        } catch (\Exception $e) {
+            return $this->sendIseResponse($e->getMessage());
+        }
+    }
+
+    public function sortPriceTermahal()
+    {
+        $sparepart = Sparepart::orderBy('harga_jual','desc')->get();
+        $response = $this->generateCollection($sparepart);
+        return $this->sendResponse($response, 200);
+    }
+
+    public function sortPriceTermurah()
+    {
+        $sparepart = Sparepart::orderBy('harga_jual','asc')->get();
+        $response = $this->generateCollection($sparepart);
+        return $this->sendResponse($response, 200);
     }
 }

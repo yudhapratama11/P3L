@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SparepartTransaction extends Model
 {
@@ -25,4 +26,7 @@ class SparepartTransaction extends Model
     {
         return $this->belongsTo(Sparepart::class,'id_sparepart','id');
     }
+
+
+
 }

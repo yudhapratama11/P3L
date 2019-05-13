@@ -16,6 +16,10 @@ class CreateCustomersMotorcycleTable extends Migration
         Schema::create('customers_motorcycle', function (Blueprint $table) {
             $table->increments('id');
             $table->string('plat');
+            $table->unsignedInteger('id_customer');
+            $table->foreign('id_customer')
+            ->references('id')->on('customers')
+            ->onDelete('cascade');
             $table->unsignedInteger('id_motorcycle_type');
             $table->foreign('id_motorcycle_type')
             ->references('id')->on('motorcycle_types')

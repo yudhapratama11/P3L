@@ -27,7 +27,7 @@ class CreateTransactionServiceDetailsTable extends Migration
             ->references('id')->on('customers_motorcycle')
             ->onDelete('cascade');
             $table->unsignedInteger('id_montir_onduty');
-            $table->foreign('id')
+            $table->foreign('id_montir_onduty')
             ->references('id')->on('employees')
             ->onDelete('cascade');
             $table->integer('status_montir_onduty');
